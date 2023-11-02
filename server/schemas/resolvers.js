@@ -4,7 +4,6 @@ const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-
     me: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
@@ -17,7 +16,6 @@ const resolvers = {
   },
 
   Mutation: {
-
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
@@ -44,13 +42,13 @@ const resolvers = {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { savedBooks: bookInput} },
+          { $push: { savedBooks: bookInput } },
           { new: true }
         );
 
         return updatedUser;
       }
-      
+
       throw AuthenticationError;
     },
 
