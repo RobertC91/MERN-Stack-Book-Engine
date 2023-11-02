@@ -1,3 +1,4 @@
+// typeDefs.js is the schema file that defines the necessary Query and Mutation types, as well as any custom types, for the application.
 const typeDefs =`
 
     type User {

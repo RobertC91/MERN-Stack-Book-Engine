@@ -5,7 +5,9 @@ import Auth from "../utils/auth";
 import { searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
+// Import the SAVE_BOOK mutation from the mutations.js file
 import { useMutation } from "@apollo/client";
+// Import the SAVE_BOOK mutation from the mutations.js file
 import { SAVE_BOOK } from "../utils/mutations";
 
 const SearchBooks = () => {
@@ -15,7 +17,7 @@ const SearchBooks = () => {
   const [searchInput, setSearchInput] = useState("");
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
-
+  // use useMutation hook to make mutation request passing in the SAVE_BOOK mutation as an argument
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
@@ -33,14 +35,15 @@ const SearchBooks = () => {
     }
 
     try {
+      // use the searchGoogleBooks function in API file and pass the searchInput value to the function
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
         throw new Error("something went wrong!");
       }
-
+      // create variable to hold the returned data from the API
       const { items } = await response.json();
-
+      // bookData is an array of objects that contain the book information we want to save
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
@@ -48,8 +51,9 @@ const SearchBooks = () => {
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || "",
       }));
-
+      // set the state of the searchedBooks array to the new array of books
       setSearchedBooks(bookData);
+      // reset the state of the input field to an empty string
       setSearchInput("");
     } catch (err) {
       console.error(err);
@@ -62,7 +66,7 @@ const SearchBooks = () => {
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
     console.log(bookToSave);
 
-    // get token
+    // get token for logged in user
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -70,7 +74,9 @@ const SearchBooks = () => {
     }
 
     try {
+      // use saveBook mutation to save book to database
       const { data } = await saveBook({
+        // pass in the bookToSave variable as an argument to the mutation
         variables: { bookInput: bookToSave },
       });
       console.log(data);

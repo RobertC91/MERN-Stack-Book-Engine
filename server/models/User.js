@@ -1,9 +1,10 @@
 const { Schema, model } = require('mongoose');
+// import bcrypt for password hashing
 const bcrypt = require('bcrypt');
 
 // import schema from Book.js
 const bookSchema = require('./Book');
-
+// create user schema with email, password, and username fields and savedBooks array that uses the bookSchema
 const userSchema = new Schema(
   {
     username: {
@@ -21,7 +22,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    // set savedBooks to be an array of data that adheres to the bookSchema
     savedBooks: [bookSchema],
   },
   // set this to use virtual below
